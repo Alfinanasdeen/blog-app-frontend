@@ -13,14 +13,18 @@ export default function EditPost() {
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_BASE_URL}/post/${id}`).then(
       (response) => {
-        response.json().then((postInfo) => {
-          setTitle(postInfo.title);
-          setContent(postInfo.content);
-          setSummary(postInfo.summary);
-        });
+        if (response.ok) {
+          response.json().then((postInfo) => {
+            setTitle(postInfo.title);
+            setContent(postInfo.content);
+            setSummary(postInfo.summary);
+          });
+        } else {
+          console.error("Failed to fetch post info");
+        }
       }
     );
-  }, []);
+  }, [id]);
 
   async function updatePost(ev) {
     ev.preventDefault();
@@ -32,13 +36,19 @@ export default function EditPost() {
     if (files?.[0]) {
       data.set("file", files?.[0]);
     }
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/post`, {
-      method: "PUT",
-      body: data,
-      credentials: "include",
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/post/${id}`,
+      {
+        method: "PUT",
+        body: data,
+        credentials: "include",
+      }
+    );
     if (response.ok) {
       setRedirect(true);
+    } else {
+      const errorMessage = await response.text();
+      console.error("Error updating post:", errorMessage);
     }
   }
 
@@ -49,18 +59,22 @@ export default function EditPost() {
   return (
     <form onSubmit={updatePost}>
       <input
-        type="title"
+        type="text"
         placeholder={"Title"}
         value={title}
         onChange={(ev) => setTitle(ev.target.value)}
       />
       <input
-        type="summary"
+        type="text"
         placeholder={"Summary"}
         value={summary}
         onChange={(ev) => setSummary(ev.target.value)}
       />
-      <input type="file" onChange={(ev) => setFiles(ev.target.files)} />
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(ev) => setFiles(ev.target.files)}
+      />
       <Editor onChange={setContent} value={content} />
       <button style={{ marginTop: "5px" }}>Update post</button>
     </form>
