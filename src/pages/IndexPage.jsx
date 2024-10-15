@@ -1,19 +1,21 @@
 import Post from "../Post";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 
 export default function IndexPage() {
-  const [posts,setPosts] = useState([]);
+  const [posts, setPosts] = useState([]);
+  
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/post`).then(response => {
-      response.json().then(posts => {
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/post`)
+      .then(response => response.json())
+      .then(posts => {
         setPosts(posts);
       });
-    });
   }, []);
+  
   return (
     <>
       {posts.length > 0 && posts.map(post => (
-        <Post {...post} />
+        <Post key={post._id} {...post} />  
       ))}
     </>
   );

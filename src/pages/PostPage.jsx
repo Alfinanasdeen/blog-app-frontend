@@ -8,11 +8,13 @@ export default function PostPage() {
   const { userInfo } = useContext(UserContext);
   const { id } = useParams();
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/post${id}`).then((response) => {
-      response.json().then((postInfo) => {
-        setPostInfo(postInfo);
-      });
-    });
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/post/${id}`).then(
+      (response) => {
+        response.json().then((postInfo) => {
+          setPostInfo(postInfo);
+        });
+      }
+    );
   }, []);
 
   if (!postInfo) return "";
@@ -44,7 +46,10 @@ export default function PostPage() {
         </div>
       )}
       <div className="image">
-        <img src={`${import.meta.env.VITE_API_BASE_URL}${postInfo.cover}`} alt="" />
+        <img
+          src={`${import.meta.env.VITE_API_BASE_URL}/${postInfo.cover}`}
+          alt=""
+        />
       </div>
       <div
         className="content"
