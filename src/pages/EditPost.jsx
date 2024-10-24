@@ -1,6 +1,62 @@
 import { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import Editor from "../Editor";
+import styled from "styled-components";
+
+// Styled components
+const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px; /* Padding inside the container */
+  background-color: #f4f4f4; /* Light background */
+  max-width: 800px; /* Max width for the form */
+  margin: 60px auto 0; /* Center form and add space at the top */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+`;
+
+
+const TitleInput = styled.input`
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd; /* Light border */
+  border-radius: 5px; /* Rounded corners */
+  font-size: 1em; /* Normal font size */
+`;
+
+const SummaryInput = styled.input`
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd; /* Light border */
+  border-radius: 5px; /* Rounded corners */
+  font-size: 1em; /* Normal font size */
+`;
+
+const FileInput = styled.input`
+  margin: 10px 0; /* Space above and below */
+`;
+
+const UpdateButton = styled.button`
+  background: linear-gradient(
+    90deg,
+    #4e54c8,
+    #8f94fb
+  ); /* Gradient background */
+  color: white; /* White text */
+  padding: 10px 20px; /* Padding for button */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  font-size: 1em; /* Normal font size */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background 0.3s; /* Smooth transition for hover effect */
+
+  &:hover {
+    opacity: 0.9; /* Slightly fade on hover */
+  }
+`;
 
 export default function EditPost() {
   const { id } = useParams();
@@ -36,14 +92,19 @@ export default function EditPost() {
     if (files?.[0]) {
       data.set("file", files?.[0]);
     }
+
+    const token = localStorage.getItem("token");
     const response = await fetch(
       `${import.meta.env.VITE_API_BASE_URL}/post/${id}`,
       {
         method: "PUT",
         body: data,
-        credentials: "include",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
+
     if (response.ok) {
       setRedirect(true);
     } else {
@@ -57,26 +118,28 @@ export default function EditPost() {
   }
 
   return (
-    <form onSubmit={updatePost}>
-      <input
-        type="text"
-        placeholder={"Title"}
-        value={title}
-        onChange={(ev) => setTitle(ev.target.value)}
-      />
-      <input
-        type="text"
-        placeholder={"Summary"}
-        value={summary}
-        onChange={(ev) => setSummary(ev.target.value)}
-      />
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(ev) => setFiles(ev.target.files)}
-      />
-      <Editor onChange={setContent} value={content} />
-      <button style={{ marginTop: "5px" }}>Update post</button>
-    </form>
+    <FormContainer>
+      <form onSubmit={updatePost} style={{ width: "100%" }}>
+        <TitleInput
+          type="text"
+          placeholder={"Title"}
+          value={title}
+          onChange={(ev) => setTitle(ev.target.value)}
+        />
+        <SummaryInput
+          type="text"
+          placeholder={"Summary"}
+          value={summary}
+          onChange={(ev) => setSummary(ev.target.value)}
+        />
+        <FileInput
+          type="file"
+          accept="image/*"
+          onChange={(ev) => setFiles(ev.target.files)}
+        />
+        <Editor onChange={setContent} value={content} />
+        <UpdateButton style={{ marginTop: "20px" }}>Update post</UpdateButton>
+      </form>
+    </FormContainer>
   );
 }

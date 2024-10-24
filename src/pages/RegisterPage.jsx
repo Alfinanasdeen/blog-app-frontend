@@ -3,19 +3,21 @@ import {useState} from "react";
 export default function RegisterPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  
   async function register(ev) {
     ev.preventDefault();
     const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/register`, {
       method: 'POST',
-      body: JSON.stringify({username,password}),
-      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ username, password }),
+      headers: { 'Content-Type': 'application/json' },
     });
     if (response.status === 200) {
-      alert('registration successful');
+      alert('Registration successful');
     } else {
-      alert('registration failed');
+      alert('Registration failed');
     }
   }
+
   return (
     <form className="register" onSubmit={register}>
       <h1>Register</h1>
