@@ -24,6 +24,12 @@ const HeaderContainer = styled.header`
   &:hover {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
   }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px 20px;
+  }
 `;
 
 const Logo = styled(Link)`
@@ -36,11 +42,21 @@ const Logo = styled(Link)`
   &:hover {
     color: #ffeb3b; /* Highlight color */
   }
+
+  @media (max-width: 768px) {
+    font-size: 24px; /* Smaller font size for mobile */
+  }
 `;
 
 const Nav = styled.nav`
   display: flex;
   gap: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    width: 100%; /* Take full width on mobile */
+    align-items: flex-start;
+  }
 `;
 
 const NavLink = styled(Link)`
@@ -55,6 +71,12 @@ const NavLink = styled(Link)`
   &:hover {
     background-color: rgba(255, 255, 255, 0.1); /* Light background on hover */
     border-color: #ffeb3b; /* Highlight border color */
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    width: 100%; /* Take full width on mobile */
+    align-items: flex-start;
   }
 `;
 
@@ -71,6 +93,12 @@ const LogoutLink = styled.a`
   &:hover {
     background-color: rgba(255, 255, 255, 0.1);
     border-color: #ffeb3b; /* Highlight border color */
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    width: 100%; /* Take full width on mobile */
+    align-items: flex-start;
   }
 `;
 

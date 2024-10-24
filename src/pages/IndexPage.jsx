@@ -13,10 +13,7 @@ const PageContainer = styled.div`
 
 const PostsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(1500px, 1fr)
-  ); 
+  grid-template-columns: repeat(auto-fill, minmax(1500px, 1fr));
   gap: 20px;
   width: 100%;
   max-width: 1200px; /* Limit the maximum width */
